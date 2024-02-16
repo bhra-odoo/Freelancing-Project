@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- View -->
+    <record id="freelancer_freelancer_view_tree" model="ir.ui.view">
+        <field name="name">freelancer.freelancer.view.tree</field>
+        <field name="model">freelancer.freelancer</field>
+        <field name="arch" type="xml">
+            <tree string="Freelancer">
+                <field name="name"/>
+                <field name="gender"/>
+                <field name="email"/>
+                <field name="mobile"/>
+                <field name="hourly_rate"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="freelancer_freelancer_view_form" model="ir.ui.view">
+        <field name="name">freelancer.freelancer.view.form</field>
+        <field name="model">freelancer.freelancer</field>
+        <field name="arch" type="xml">
+            <form string="Freelancer">
+                <sheet>
+                    <div class="o_field_widget o_field_image oe_avatar">
+                        <div class="d-inline-block position-relative">
+                            <div class="d-flex justify-content-between w-100 bottom-0">
+                                <field name="freelancer_image" widget="image"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="oe_title mb-3 mx-3 position-relative">
+                        <h1>
+                            <label for="name" string="Title"/>
+                            <field name="name" placeholder="Freelancer Name"></field>
+                        </h1>
+                    </div>
+                    <div class="row mx-3">
+                        <div class="col-md-6">
+                            <group>
+                                <field name="email"/>
+                                <field name="mobile"/>
+                                <field name="hourly_rate"/>
+                            </group>
+                        </div>
+                        <div class="col-md-6">
+                            <group>
+                                <field name="gender"/>
+                                <field name="address"/>
+                            </group>
+                        </div>
+                    </div>
+                    <notebook>
+                        <page string="Project" >
+                            <field name="skill_ids">
+                                <tree editable="bottom">
+                                    <field name="s_name"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="freelancer_freelancer_view_search" model="ir.ui.view">
+        <field name="name">freelancer.freelancer.view.search</field>
+        <field name="model">freelancer.freelancer</field>
+        <field name="arch" type="xml">
+            <search string="Freelancer">
+                <field name="name"/>
+                <field name="gender"/>
+                <field name="email"/>
+                <field name="mobile"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="freelancer_freelancer_action" model="ir.actions.act_window">
+        <field name="name">Freelancers</field>
+        <field name="res_model">freelancer.freelancer</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Freelancer
+              </p>
+        </field>
+    </record>
+</odoo>

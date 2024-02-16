@@ -9,7 +9,7 @@ class Payment(models.Model):
     name = fields.Char(string='Payment Reference', required=True)
     invoice_id = fields.Many2one('freelancer.invoice', string='Invoice', required=True)
     date = fields.Date(string='Payment Date', required=True)
-    amount = fields.Float(string='Amount', defalt=0, required=True)
+    amount = fields.Float(string='Amount', default=0, required=True)
     payment_method = fields.Selection([
         ('bank_transfer', 'Bank Transfer'),
         ('credit_card', 'Credit Card'),

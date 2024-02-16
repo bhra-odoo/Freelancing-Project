@@ -7,6 +7,7 @@ class Freelancer(models.Model):
     _description = 'Freelancer Information'
 
     name = fields.Char(string='Name', required=True)
+    freelancer_image = fields.Image(string='Image', max_width=1920, max_height=1920)
     gender = fields.Selection(
         string='Gender',
         selection=[('male','Male'),('female','Female')]
@@ -15,4 +16,4 @@ class Freelancer(models.Model):
     mobile = fields.Char(string='Mobile', required=True)
     address = fields.Text(string='Address')
     hourly_rate = fields.Float(string='Hourly Rate', default=0)
-    skills = fields.Text(string='Skills')
+    skill_ids = fields.Many2many('freelancer.skills', string='Skills')

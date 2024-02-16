@@ -1,2 +1,7 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-,,,,,,,
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_freelancer_freelancer","access_freelancer_freelancer","model_freelancer_freelancer","base.group_user",1,1,1,1
+"access_freelancer_client","access_freelancer_client","model_freelancer_client","base.group_user",1,1,1,1
+"access_freelancer_project","access_freelancer_project","model_freelancer_project","base.group_user",1,1,1,1
+"access_freelancer_task","access_freelancer_task","model_freelancer_task","base.group_user",1,1,1,1
+"access_freelancer_tags","access_freelancer_tags","model_freelancer_tags","base.group_user",1,1,1,1
+"access_freelancer_skills","access_freelancer_skills","model_freelancer_skills","base.group_user",1,1,1,1

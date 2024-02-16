@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <!-- View -->
+     <record id="freelancer_skills_view_tree" model="ir.ui.view">
+        <field name="name">freelancer.skills.view.tree</field>
+        <field name="model">freelancer.skills</field>
+        <field name="arch" type="xml">
+            <tree string="Skills">
+                <field name="s_name"/>    
+            </tree>
+        </field>
+    </record>
+
+    <record id="freelancer_skills_view_form" model="ir.ui.view">
+        <field name="name">freelancer.skills.view.form</field>
+        <field name="model">freelancer.skills</field>
+        <field name="arch" type="xml">
+            <form string="Skills">
+                <sheet>
+                    <group>
+                        <field name="s_name"/>  
+                        <field name="freelancer_ids" widget="many2many_tags"/> 
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="freelancer_skills_action" model="ir.actions.act_window">
+        <field name="name">Skills</field>
+        <field name="res_model">freelancer.skills</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new skills
+              </p>
+        </field>
+    </record>
+</odoo>
