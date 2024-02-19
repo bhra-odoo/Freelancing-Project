@@ -17,3 +17,4 @@ class Freelancer(models.Model):
     address = fields.Text(string='Address')
     hourly_rate = fields.Float(string='Hourly Rate', default=0)
     skill_ids = fields.Many2many('freelancer.skills', string='Skills')
+    project_id = fields.Many2one('freelancer.project')

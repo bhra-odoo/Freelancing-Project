@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!-- Define User Group -->
-    <record id="freelancing_group_user" model="res.groups">
-        <field name="name">User</field>
+    <record id="freelancing_group_client" model="res.groups">
+        <field name="name">Client</field>
         <field name="category_id" ref="base.module_category_industry_freelancing"/>
+    </record>
+
+    <record id="estate_group_freelancer" model="res.groups">
+        <field name="name">Freelancer</field>
+        <field name="category_id" ref="base.module_category_industry_freelancing"/>
+        <field name="implied_ids" eval="[(4, ref('freelancing_group_client'))]"/>
     </record>
 </odoo>

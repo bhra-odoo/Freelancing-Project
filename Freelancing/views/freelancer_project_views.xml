@@ -21,6 +21,10 @@
         <field name="model">freelancer.project</field>
         <field name="arch" type="xml">
             <form string="Project">
+                <header>
+                    <button name="action_completed" type="object" class='bg-primary text-white' string="Mark as Complete"/>
+                    <button name="action_cancel" type="object" string="Cancel"/>
+                </header>
                 <sheet>
                     <div class="oe_title mb-3 mx-3 position-relative">
                         <h1>
@@ -46,7 +50,7 @@
                         </div>
                     </div>
                     <notebook>
-                        <page string="Tasks" >
+                        <page string="Tasks">
                             <field name="task_ids">
                                 <tree editable="bottom" open_form_view="True">
                                     <field name="name"/>
@@ -54,6 +58,16 @@
                                     <field name="assigned_to"/>
                                     <field name="tag_ids" widget="many2many_tags"/>
                                     <field name="completed"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Bids">
+                            <field name="bid_ids">
+                                <tree editable="bottom" open_form_view="True">
+                                    <field name="name"/>
+                                    <field name="email"/>
+                                    <field name="hourly_rate"/>
+                                    <field name="skill_ids" widget="many2many_tags"/>
                                 </tree>
                             </field>
                         </page>
