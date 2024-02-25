@@ -15,7 +15,8 @@ class Project(models.Model):
     end_date = fields.Date(string='End Date', required=True)
     task_ids = fields.One2many('freelancer.task', 'project_id', string='Tasks', required=True)
     tag_ids = fields.Many2many('freelancer.tags', string='Tags')
-    bid_ids = fields.One2many('freelancer.freelancer', 'project_id', string='Bids')
+    ammount = fields.Float(string="Ammount")
+    bid_ids = fields.One2many('freelancer.bids', 'project_id', string='Bids')
     state = fields.Selection([
         ('new', 'New'),
         ('offer_received', 'Offer Received'),
@@ -35,4 +36,4 @@ class Project(models.Model):
             if record.state == 'completed':
                 raise UserError("Cannot Mark a Project Canceled that is already Completed!")
             record.state = 'canceled'
-            
+    

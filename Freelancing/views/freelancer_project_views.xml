@@ -11,7 +11,7 @@
                 <field name="assigned_to"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
-                <field name="tag_ids" widget="many2many_tags"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
             </tree>
         </field>
     </record>
@@ -22,8 +22,9 @@
         <field name="arch" type="xml">
             <form string="Project">
                 <header>
-                    <button name="action_completed" type="object" class='bg-primary text-white' string="Mark as Complete"/>
+                    <button name="%(freelancer_bids_action)d" type="action" class='oe_highlight' string="Bid"/>
                     <button name="action_cancel" type="object" string="Cancel"/>
+                    <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <div class="oe_title mb-3 mx-3 position-relative">
@@ -38,14 +39,15 @@
                                 <field name="description"/>
                                 <field name="client_id"/>
                                 <field name="assigned_to" />
-                                <field name="tag_ids" widget="many2many_tags"/>
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                             </group>
                         </div>
                         <div class="col-md-6">
                             <group>
                                 <field name="start_date"/>
                                 <field name="end_date"/>
-                                <field name="state" />
+                                <field name="ammount"/>
+                                <field name="state"/>
                             </group>
                         </div>
                     </div>
@@ -64,10 +66,12 @@
                         <page string="Bids">
                             <field name="bid_ids">
                                 <tree editable="bottom" open_form_view="True">
-                                    <field name="name"/>
-                                    <field name="email"/>
-                                    <field name="hourly_rate"/>
-                                    <field name="skill_ids" widget="many2many_tags"/>
+                                    <field name="freelancer_id"/>
+                                    <field name="bid_amount"/>
+                                    <field name="bid_description"/>
+                                    <field name="status"/>
+                                    <button name="action_offer_accepted" string="Accept" type="object" icon="fa-check" invisible="status == 'accepted' or status == 'refused'"/>
+                                    <button name="action_offer_refused" string="Refuse" type="object" icon="fa-close" invisible="status == 'accepted' or status == 'refused'"/>
                                 </tree>
                             </field>
                         </page>

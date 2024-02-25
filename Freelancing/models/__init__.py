@@ -10,3 +10,4 @@ from . import freelancer_payment
 from . import freelancer_project_report
 from . import freelancer_invoice_report
 from . import freelancer_skills
+from . import freelancer_bids

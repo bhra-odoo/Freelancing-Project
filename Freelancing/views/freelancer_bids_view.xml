@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Views -->
+    <record id="freelancer_bids_view_tree" model="ir.ui.view">
+        <field name="name">freelancer.bids.view.tree</field>
+        <field name="model">freelancer.bids</field>
+        <field name="arch" type="xml">
+            <tree string="Bids">
+                <field name="freelancer_id"/>
+                <field name="bid_amount"/>
+                <field name="bid_description"/>
+                <field name="status"/>       
+            </tree>
+        </field>
+    </record>
+
+    <record id="freelancer_bids_view_form" model="ir.ui.view">
+        <field name="name">freelancer.bids.view.form</field>
+        <field name="model">freelancer.bids</field>
+        <field name="arch" type="xml">
+            <form string="Bids">
+                <group>
+                    <field name="freelancer_id"/>
+                    <field name="bid_amount"/>
+                    <field name="bid_description"/>
+                    <field name="status"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="freelancer_bids_action" model="ir.actions.act_window">
+        <field name="name">Bid</field>
+        <field name="res_model">freelancer.bids</field>
+        <field name="view_mode">form,tree</field>
+        <field name="view_id" ref="freelancer_bids_view_form"/>
+        <field name="target">new</field>
+        <field name="context">{'default_project_id': active_id}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new Bid
+              </p>
+        </field>
+    </record>
+</odoo>

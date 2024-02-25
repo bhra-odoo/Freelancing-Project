@@ -5,3 +5,4 @@
 "access_freelancer_task","access_freelancer_task","model_freelancer_task","base.group_user",1,1,1,1
 "access_freelancer_tags","access_freelancer_tags","model_freelancer_tags","base.group_user",1,1,1,1
 "access_freelancer_skills","access_freelancer_skills","model_freelancer_skills","base.group_user",1,1,1,1
+"access_freelancer_bids","access_freelancer_bids","model_freelancer_bids","base.group_user",1,1,1,1
