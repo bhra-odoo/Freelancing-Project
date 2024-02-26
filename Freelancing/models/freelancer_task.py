@@ -11,6 +11,10 @@ class Task(models.Model):
     description = fields.Text(string='Description')
     project_id = fields.Many2one('freelancer.project', string='Project', required=True)
     deadline = fields.Date(string='Deadline', required=True)
-    assigned_to = fields.Many2one('res.users', string='Assigned To', required=True)
+    assigned_to = fields.Many2one('freelancer.freelancer', string='Assigned To', required=True)
     tag_ids = fields.Many2many('freelancer.tags',string='Tags')
-    completed = fields.Boolean(string='Completed')
+    status = fields.Selection([('pending', 'Pending'), ('completed', 'Completed')], default='pending', string='Status')
+
+    def action_task_complete(self):
+        self.status = 'completed'
+        

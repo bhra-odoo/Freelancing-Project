@@ -22,17 +22,9 @@ class FreelancerBids(models.Model):
             })
             self.status = 'accepted'
             other_offers = self.project_id.bid_ids.filtered(lambda bid: bid.id != self.id)
-            other_offers.write({'status': 'refused'})
+            other_offers.write({'status': 'rejected'})
         else:
             raise UserError("Another ofer is alrealy accepted")
 
     def action_offer_refused(self):
         self.status = 'rejected'
-
-    @api.model
-    def create(self, vals):
-        if 'project_id' in vals:
-            self.project_obj.state = 'offer_received'
-            return super(FreelancerBids, self).create(vals)
-        else:
-            raise ValidationError("Project ID is required for creating a bid.")

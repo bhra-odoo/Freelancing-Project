@@ -12,8 +12,8 @@
     'license': 'OEEL-1',
     'version': '1.0',
     'data': [
-        'security/ir.model.access.csv',
         'security/security.xml',
+        'security/ir.model.access.csv',
         'views/freelancer_bids_view.xml',
         'views/freelancer_tasks_views.xml',
         'views/freelancer_skills_views.xml',

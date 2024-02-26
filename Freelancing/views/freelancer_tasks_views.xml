@@ -12,7 +12,6 @@
                 <field name="assigned_to"/>
                 <field name="deadline"/>
                 <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                <field name="completed"/>
             </tree>
         </field>
     </record>
@@ -42,7 +41,6 @@
                             <group>
                                 <field name="client_id"/>
                                 <field name="project_id"/>
-                                <field name="completed" />
                             </group>
                         </div>
                     </div>
@@ -62,7 +60,6 @@
                 <field name="assigned_to"/>
                 <field name="deadline"/>
                 <field name="tag_ids" widget="many2many_tags"/>
-                <field name="completed"/>
             </search>
         </field>
     </record>
@@ -71,8 +68,7 @@
     <record id="freelancer_tasks_action" model="ir.actions.act_window">
         <field name="name">Tasks</field>
         <field name="res_model">freelancer.task</field>
-        <field name="view_mode">kanban,tree,form</field>
-        <field name="context">{'default_project_id': active_id}</field>
+        <field name="view_mode">tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Add a new Task

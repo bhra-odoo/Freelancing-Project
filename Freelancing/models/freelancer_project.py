@@ -26,14 +26,15 @@ class Project(models.Model):
     ], string='State', required=True, default="new", copy=False)
 
     def action_completed(self):
-        for record in self:
-            if record.state == 'canceled':
-                raise UserError("Cannot Mark a Project Completed that is already Cnceled!")
-            record.state = 'completed'
+        if self.state == 'canceled':
+            raise UserError("Cannot Mark a Project Completed that is already Cnceled!")
+        if all(task.status == 'completed' for task in self.task_ids):
+            self.state = 'completed'
+        else:
+            raise UserError("You need to Complete Remaining Tasks!")
     
     def action_cancel(self):
-        for record in self:
-            if record.state == 'completed':
-                raise UserError("Cannot Mark a Project Canceled that is already Completed!")
-            record.state = 'canceled'
+        if self.state == 'completed':
+            raise UserError("Cannot Mark a Project Canceled that is already Completed!")
+        self.state = 'canceled'
     

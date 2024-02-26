@@ -22,8 +22,9 @@
         <field name="arch" type="xml">
             <form string="Project">
                 <header>
-                    <button name="%(freelancer_bids_action)d" type="action" class='oe_highlight' string="Bid"/>
-                    <button name="action_cancel" type="object" string="Cancel"/>
+                    <button name="%(freelancer_bids_action)d" type="action" class='oe_highlight' string="Bid" invisible="state not in ['new','offer_offer_received']"/>
+                    <button name="action_completed" type="object" class='oe_highlight' string="Mark As Completed" invisible="state != 'offer_accepted'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state == 'completed'"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -59,19 +60,20 @@
                                     <field name="deadline"/>
                                     <field name="assigned_to"/>
                                     <field name="tag_ids" widget="many2many_tags"/>
-                                    <field name="completed"/>
+                                    <field name="status"/>
+                                    <button name="action_task_complete" type="object" icon="fa-check" invisible="status == 'completed'"/>
                                 </tree>
                             </field>
                         </page>
-                        <page string="Bids">
+                        <page string="Bids" groups="Freelancing.freelancing_group_client">
                             <field name="bid_ids">
                                 <tree editable="bottom" open_form_view="True">
                                     <field name="freelancer_id"/>
                                     <field name="bid_amount"/>
                                     <field name="bid_description"/>
                                     <field name="status"/>
-                                    <button name="action_offer_accepted" string="Accept" type="object" icon="fa-check" invisible="status == 'accepted' or status == 'refused'"/>
-                                    <button name="action_offer_refused" string="Refuse" type="object" icon="fa-close" invisible="status == 'accepted' or status == 'refused'"/>
+                                    <button name="action_offer_accepted" string="Accept" type="object" icon="fa-check" invisible="status == 'accepted' or status == 'rejected'"/>
+                                    <button name="action_offer_refused" string="Refuse" type="object" icon="fa-close" invisible="status == 'accepted' or status == 'rejected'"/>
                                 </tree>
                             </field>
                         </page>
