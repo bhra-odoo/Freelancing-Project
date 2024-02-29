@@ -11,7 +11,10 @@ class FreelancerBids(models.Model):
     project_id = fields.Many2one('freelancer.project', string='Project', ondelete='cascade')
     bid_amount = fields.Float(string='Bid Amount')
     bid_description = fields.Text(string='Bid Description')
-    status = fields.Selection([('pending', 'Pending'), ('accepted', 'Accepted'), ('rejected', 'Rejected')], default='pending', string='Status')
+    status = fields.Selection([
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected')], default='pending', string='Status')
 
     def action_offer_accepted(self):
         if self.project_id.state != 'offer_accepted':

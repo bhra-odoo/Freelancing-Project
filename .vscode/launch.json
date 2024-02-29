@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+
+            "name": "Python: Odoo",     
+           
+            "type": "python",           
+           
+            "request": "launch",            
+           
+           "pythonPath": "/usr/bin/python3",            
+           
+           "console": "integratedTerminal", 
+           
+            "program": "/home/odoo/odoo/community/odoo-bin",
+           
+            "args": ["start", "--database=freelancer", "--db-filter=freelancer", "-i base",  "--addons-path=/home/odoo/odoo/community/addons",],
+           
+            "cwd": "${workspaceRoot}",
+           
+            "env": {},
+           
+            "envFile": "${workspaceRoot}/.env",
+           
+           }
+    ]
+}

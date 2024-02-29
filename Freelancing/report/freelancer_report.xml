@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_freelancer_project" model="ir.actions.report">
+        <field name="name">Project Report</field>
+        <field name="model">freelancer.project</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">Freelancing.report_freelancer_project</field>
+        <field name="report_file">Freelancing.report_freelancer_project</field>
+        <field name="print_report_name">'Project Report - %s' % (object.name or 'Property')</field>
+        <field name="binding_model_id" ref="model_freelancer_project"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_freelancer_client" model="ir.actions.report">
+        <field name="name">Client Report</field>
+        <field name="model">freelancer.client</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">Freelancing.report_freelancer_client</field>
+        <field name="report_file">Freelancing.report_freelancer_client</field>
+        <field name="print_report_name">'Client Report - %s' % (object.name or 'user')</field>
+        <field name="binding_model_id" ref="model_freelancer_client"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

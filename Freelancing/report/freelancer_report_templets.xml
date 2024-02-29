@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_freelancer_project">
+        <t t-foreach="docs" t-as="project">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <header><h1 class="d-flex justify-content-center mb-5">Project Report</h1></header>
+                        <h2>
+                            <span t-field="project.name"/>
+                        </h2>
+                        <div>
+                            <strong>Client : </strong>
+                            <span t-field="project.client_id"/>
+                        </div>
+                        <div>
+                            <strong>Start Date: </strong>
+                            <span t-field="project.start_date"/>
+                            <br/>
+                            <strong>End Date: </strong>
+                            <span t-field="project.end_date"/>
+                        </div>
+                        <div class="state">
+                            <strong>State: </strong>
+                            <span t-field="project.state"/>
+                        </div>
+                        <t t-if="project.task_ids">
+                            <t t-call="Freelancing.project_task_table"/>
+                        </t>
+                        <t t-else="">
+                            <p>No tasks have been created yet :<span>&#40;</span></p>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="project_task_table">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Deadline</th>
+                    <th>Assigned To</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <t t-set="tasks" t-value="project.mapped('task_ids')"/>
+                <tr t-foreach="tasks" t-as="task">
+                    <td>
+                        <span t-field="task.name"/>     
+                    </td>
+                    <td>
+                        <span t-field="task.deadline"/>
+                    </td>
+                    <td>
+                        <span t-field="task.assigned_to"/>
+                    </td>
+                    <td>
+                        <span t-field="task.status"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+
+    <template id="project_bids_table">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Freelancer</th>
+                    <th>Project</th>
+                    <th>Bid Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <t t-set="bids" t-value="client.project_ids.mapped('bid_ids')"/>
+                <tr t-foreach="bids" t-as="bid">
+                    <td>
+                        <span t-field="bid.freelancer_id"/>     
+                    </td>
+                    <td>
+                        <span t-field="bid.project_id"/>
+                    </td>
+                    <td>
+                        <span t-field="bid.bid_amount"/>
+                    </td>
+                    <td>
+                        <span t-field="bid.status"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+
+    <template id="report_freelancer_client">
+        <t t-foreach="docs" t-as="client">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <header><h1 class="d-flex justify-content-center mb-5">Properties Report</h1></header>
+                        <h1><strong>Client Name: </strong><span t-field="client.name"/></h1>
+                        <t t-if="client.project_ids">
+                            <t t-foreach="client.project_ids" t-as="project">
+                                <h2><span t-field="project.name"/></h2>
+                                <div><strong>Assigned To: </strong><span t-field="project.assigned_to"/></div>
+                                <div class="state"><strong>State: </strong><span t-field="project.state"/></div>
+                                <t t-if="project.task_ids">
+                                    <t t-call="Freelancing.project_task_table"/>
+                                </t>
+                                <t t-else="">
+                                    <p>No tasks have been created yet :<span>&#40;</span></p>
+                                </t>
+                            </t>
+                            <t t-if="client.project_ids.bid_ids">
+                                <h1 class="d-flex justify-content-center my-5">Bids: </h1>
+                                <t t-call="Freelancing.project_bids_table"/>
+                            </t>
+                            <t t-else="">
+                                <p>There are no bids.</p>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <p>Sorry you dont have any Projects</p>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

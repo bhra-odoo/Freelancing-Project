@@ -14,6 +14,8 @@
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
+        'report/freelancer_report_templets.xml',
+        'report/freelancer_report.xml',
         'views/freelancer_bids_view.xml',
         'views/freelancer_tasks_views.xml',
         'views/freelancer_skills_views.xml',
