@@ -77,7 +77,7 @@
                 </tr>
             </thead>
             <tbody>
-                <t t-set="bids" t-value="client.project_ids.mapped('bid_ids')"/>
+                <t t-set="bids" t-value="project.mapped('bid_ids')"/>
                 <tr t-foreach="bids" t-as="bid">
                     <td>
                         <span t-field="bid.freelancer_id"/>     
@@ -115,7 +115,8 @@
                                     <p>No tasks have been created yet :<span>&#40;</span></p>
                                 </t>
                             </t>
-                            <t t-if="client.project_ids.bid_ids">
+                            <t t-set="project" t-value="client.project_ids"/>
+                            <t t-if="project.bid_ids">
                                 <h1 class="d-flex justify-content-center my-5">Bids: </h1>
                                 <t t-call="Freelancing.project_bids_table"/>
                             </t>

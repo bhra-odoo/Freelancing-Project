@@ -18,11 +18,13 @@ class FreelancerBids(models.Model):
 
     def action_offer_accepted(self):
         if self.project_id.state != 'offer_accepted':
-            self.project_id.write({
-                'state': 'offer_accepted',
-                'assigned_to': self.freelancer_id,
-                'ammount': self.bid_amount
-            })
+            self.project_id.write(
+                {
+                    'state': 'offer_accepted',
+                    'assigned_to': self.freelancer_id,
+                    'ammount': self.bid_amount
+                }
+            )
             self.status = 'accepted'
             other_offers = self.project_id.bid_ids.filtered(lambda bid: bid.id != self.id)
             other_offers.write({'status': 'rejected'})

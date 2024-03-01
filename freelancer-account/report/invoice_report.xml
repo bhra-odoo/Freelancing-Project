@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- <template id="extended_property_report" inherit_id="Real Estate.property_offers_table">
+    <template id="extended_freelancer_report" inherit_id="Freelancing.project_task_table">
         <xpath expr="//table[@class='table']" position="before">
-            <t t-if="property.state == 'sold'">
+            <t t-if="project.state == 'completed'">
                 <div>
                     <p><b>!!!Invoice has already been created!!!</b></p>
                 </div>
             </t>
         </xpath>
-    </template> -->
+    </template>
 </odoo>

@@ -7,3 +7,4 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     freelancer_id = fields.Many2one('freelancer.freelancer', string='Freelancer')
+    

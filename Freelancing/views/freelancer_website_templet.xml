@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="website_projects_page">
+        <t t-call="website.layout">
+            <section class="p-5">
+                <div class="container">
+                    <h1 class="d-flex justify-content-center">Projects</h1>
+                    <h6 class="d-flex justify-content-center mb-5">"Freelancers are like architects
+                        of opportunity, crafting success from the blueprints of projects, one
+                        skillful endeavor at a time."</h6>
+                    <form
+                        class="form-inline d-flex justify-content-center align-items-center mb-2 px-3"
+                        action="/filtered_projects" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+                        <label for="datePicker" class="form-label mr-2">name: </label>
+                        <input type="text" id="client-name" name="name" class="form-control mx-3" />
+                        <input class="btn btn-primary" type="submit" name="submit" />
+                    </form>
+                    <div class="row">
+                        <t id="prop" t-foreach="projects" t-as="project">
+                            <div class="col-sm-12">
+                                <div class="card shadow p-3 my-3 bg-white rounded">
+                                    <div class="card-body row">
+                                        <div class="col-sm-12">
+                                            <div class="ml-5">
+                                                <h1 class="card-title">
+                                                    <t t-out="project.name" />
+                                                </h1>
+                                                <h6 class="card-text text-muted">
+                                                    <t t-out="project.description" />
+                                                </h6>
+                                                <div class="row mt-3">
+                                                    <div class="col-sm">
+                                                        <p class="text-muted">
+                                                            <strong>Client: </strong>
+                                                            <t class="text-sm-left" t-out="project.client_id.name" />
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <p class="text-muted">
+                                                            <strong>Start Date: </strong>
+                                                            <t class="text-sm-left" t-out="project.start_date" />
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <p class="text-muted">
+                                                            <strong>End date: </strong>
+                                                            <t class="text-sm-left" t-out="project.end_date" />
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-4">
+                                                    <div class="col-sm">
+                                                        <h5><strong>Ammount: </strong>$<t t-out="project.ammount" /></h5>
+                                                    </div>
+                                                    <div class="col-sm d-flex justify-content-end">
+                                                        <a class="btn btn-primary btn-lg" t-att-href="'/projects/' + str(project.id)">Details</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                    <div class="oe_structure oe_new">
+                        <div t-if="pager" class="o_portal_pager d-flex justify-content-center my-3">
+                            <t t-call="website.pager" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </t>
+    </template>
+
+    <template id="project_details_template" name="Project Details">
+        <t t-call="website.layout">
+            <section>
+                <div class="container mt-5">
+                    <div class="card shadow p-3 my-5 bg-white rounded">
+                        <div class="card-body p-5">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="project-details">
+                                        <div class="w-75">
+                                            <h1>
+                                                <t t-out="project.name" />
+                                            </h1>
+                                            <h6 class="mb-3">
+                                                <t t-out="project.description" />
+                                            </h6>
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <p>
+                                                        <strong>Start Date:</strong>
+                                                        <t t-out="project.start_date" />
+                                                    </p>
+                                                    <p>
+                                                        <strong>Client:</strong>
+                                                        <t t-out="project.client_id.id" />
+                                                    </p>
+                                                    <p>
+                                                        <strong>Amount:</strong>
+                                                        <t t-out="project.ammount" />
+                                                    </p>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <p>
+                                                        <strong>End Date:</strong>
+                                                        <t t-out="project.end_date" />
+                                                    </p>
+                                                    <p>
+                                                        <strong>Freelancer:</strong>
+                                                        <t t-out="project.assigned_to.id" />
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-md-12">
+                                                    <h2>Tasks</h2>
+                                                    <t t-if="project.task_ids">
+                                                        <t t-call="Freelancing.project_task_table" />
+                                                    </t>
+                                                    <t t-else="">
+                                                        <p>clien has not create any tasks yet.</p>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                            <h2 class="mt-3">Active Bids:</h2>
+                                            <t t-if="project.bid_ids">
+                                                <t t-call="Freelancing.project_bids_table" />
+                                            </t>
+                                            <t t-else="">
+                                                <p>clien has not create any tasks yet.</p>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </t>
+    </template>
+</odoo>
