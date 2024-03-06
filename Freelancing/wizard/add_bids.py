@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-from odoo import fields, models
+from odoo import fields, models, Command
 
 class AddBids(models.TransientModel):
     _name = 'add.bids'
@@ -14,13 +14,14 @@ class AddBids(models.TransientModel):
     def action_add_bid(self):
         active_ids = self.env.context.get('active_ids')
         projects = self.env['freelancer.project'].browse(active_ids)
-        for project in projects:
-            project.bid_ids.create(
-                {
-                    'bid_amount': self.bid_amount,
-                    'bid_description': self.bid_description,
-                    'freelancer_id': self.freelancer_id.id,
-                    'project_id': project.id,
-                }
-            )
-            
+        projects.write(
+            {
+                'bid_ids':[
+                    Command.create({
+                        'bid_amount': self.bid_amount,
+                        'bid_description': self.bid_description,
+                        'freelancer_id': self.freelancer_id.id,
+                    })
+                ]
+            }
+        )

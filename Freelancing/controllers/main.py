@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-from odoo import http
+from odoo import http, Command
 
 class FreelancerController(http.Controller):
 
@@ -41,4 +41,27 @@ class FreelancerController(http.Controller):
     @http.route('/projects/<model("freelancer.project"):project_id>', type='http', auth="public", website=True)
     def property_details(self, project_id, **kw):
         return http.request.render('Freelancing.project_details_template', {'project': project_id})
+    
+    @http.route(['/place_bid', '/place_bid/<int:project_id>'], type='http', auth="public", website=True)
+    def place_bids(self, project_id, **kw):
+        breakpoint()
+        name = http.request.httprequest.form.get('name')
+        email= http.request.httprequest.form.get('email')
+        mobile = http.request.httprequest.form.get('mobile')
+        bid_ammount = http.request.httprequest.form.get('bid_ammount')
+        description = http.request.httprequest.form.get('description')
+
+        project = http.request.env['freelancer.project'].browse(project_id)
+        freelancer = http.request.env['freelancer.freelancer']
+
+        project.write({
+            'bid_ids': [
+                Command.create({
+                    'bid_amount': bid_ammount,
+                    'bid_description': description,
+                })
+            ]
+        })
+
+        return http.request.render('Freelancing.website_bids_page')
     

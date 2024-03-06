@@ -80,66 +80,92 @@
                 <div class="container mt-5">
                     <div class="card shadow p-3 my-5 bg-white rounded">
                         <div class="card-body p-5">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="project-details">
-                                        <div class="w-75">
-                                            <h1>
-                                                <t t-out="project.name" />
-                                            </h1>
-                                            <h6 class="mb-3">
-                                                <t t-out="project.description" />
-                                            </h6>
-                                            <div class="row">
-                                                <div class="col-sm-4">
-                                                    <p>
-                                                        <strong>Start Date:</strong>
-                                                        <t t-out="project.start_date" />
-                                                    </p>
-                                                    <p>
-                                                        <strong>Client:</strong>
-                                                        <t t-out="project.client_id.id" />
-                                                    </p>
-                                                    <p>
-                                                        <strong>Amount:</strong>
-                                                        <t t-out="project.ammount" />
-                                                    </p>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <p>
-                                                        <strong>End Date:</strong>
-                                                        <t t-out="project.end_date" />
-                                                    </p>
-                                                    <p>
-                                                        <strong>Freelancer:</strong>
-                                                        <t t-out="project.assigned_to.id" />
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="row mt-3">
-                                                <div class="col-md-12">
-                                                    <h2>Tasks</h2>
-                                                    <t t-if="project.task_ids">
-                                                        <t t-call="Freelancing.project_task_table" />
-                                                    </t>
-                                                    <t t-else="">
-                                                        <p>clien has not create any tasks yet.</p>
-                                                    </t>
-                                                </div>
-                                            </div>
-                                            <h2 class="mt-3">Active Bids:</h2>
-                                            <t t-if="project.bid_ids">
-                                                <t t-call="Freelancing.project_bids_table" />
+                            <div class="project-details d-flex justify-content-center ">
+                                <div class="w-75">
+                                    <h1>
+                                        <t t-out="project.name" />
+                                    </h1>
+                                    <h6 class="mb-3">
+                                        <t t-out="project.description" />
+                                    </h6>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <p>
+                                                <strong>Start Date:</strong>
+                                                <t t-out="project.start_date" />
+                                            </p>
+                                            <p>
+                                                <strong>Client:</strong>
+                                                <t t-out="project.client_id.id" />
+                                            </p>
+                                            <p>
+                                                <strong>Amount:</strong>
+                                                <t t-out="project.ammount" />
+                                            </p>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <p>
+                                                <strong>End Date:</strong>
+                                                <t t-out="project.end_date" />
+                                            </p>
+                                            <p>
+                                                <strong>Freelancer:</strong>
+                                                <t t-out="project.assigned_to.id" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <h2>Tasks</h2>
+                                            <t t-if="project.task_ids">
+                                                <t t-call="Freelancing.project_task_table" />
                                             </t>
                                             <t t-else="">
                                                 <p>clien has not create any tasks yet.</p>
                                             </t>
                                         </div>
                                     </div>
+                                    <h2 class="mt-3">Active Bids:</h2>
+                                    <t t-if="project.bid_ids">
+                                        <t t-call="Freelancing.project_bids_table" />
+                                    </t>
+                                    <t t-else="">
+                                        <p>clien has not create any tasks yet.</p>
+                                    </t>
+                                    <div class="col-sm d-flex justify-content-start mt-3">
+                                        <a class="btn btn-primary btn-lg" t-att-href="'/place_bid/' + str(project.id)">Place bid</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </section>
+        </t>
+    </template>
+
+    <template id="website_bids_page">
+        <t t-call="website.layout">
+            <section class="p-5">
+                <div class="container">
+                    <h1 class="d-flex justify-content-center">Projects</h1>
+                    <h6 class="d-flex justify-content-center mb-5">"Freelancers are like architects
+                        of opportunity, crafting success from the blueprints of projects, one
+                        skillful endeavor at a time."</h6>
+                    <form class="form-inline mb-2 px-3" action="/place_bid" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+                        <label for="freelancer-name" class="mt-3 mx-3">Name: </label>
+                        <input type="text" id="freelancer-name" name="name" class="form-control mx-3"></input>
+                        <label for="freelancer-email" class="mt-3 mx-3">Email: </label>
+                        <input type="text" id="freelancer-email" name="email" class="form-control mx-3"></input>
+                        <label for="freelancer-mobile" class="mt-3 mx-3">Mobile: </label>
+                        <input type="text" id="freelancer-mobile" name="mobile" class="form-control mx-3"></input>
+                        <label for="amount" class="mt-3 mx-3">Amount: </label>
+                        <input id="ammount" type="text" name="bid_ammount" class="form-control mx-3"></input>
+                        <label for="description" class="mt-3 mx-3">Description: </label>
+                        <input type="text" id="description" name="description" class="form-control mx-3"></input>
+                        <input class="btn btn-primary my-3 mx-3" type="submit" name="submit"/>
+                    </form>
                 </div>
             </section>
         </t>

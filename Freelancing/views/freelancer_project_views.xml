@@ -83,6 +83,43 @@
         </field>
     </record>
 
+    <record id="freelancer_project_view_graph" model="ir.ui.view">
+        <field name="name">freelancer.project.view.graph</field>
+        <field name="model">freelancer.project</field>
+        <field name="arch" type="xml">
+            <graph string="Project">
+                <field name="start_date" interval="month"/>
+                <field name="client_id"/>
+                <field name="ammount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="freelancer_project_view_gantt" model="ir.ui.view">
+        <field name="name">freelancer.project.view.gantt</field>
+        <field name="model">freelancer.project</field>
+        <field name="arch" type="xml">
+            <gantt 
+                date_start="start_date"
+                date_stop="end_date"
+                default_scale="month"
+                color="client_id"
+                decoration-info="state == 'new'"
+                scales="day,week,month,year"
+                string="Project"
+                default_group_by="assigned_to"
+                pill_label="True">
+                <field name="state"/>
+                <field name="ammount" />
+                <templates>
+                    <div t-name="gantt-popover">
+                        <div><strong>ammount — </strong><t t-esc="ammount"/></div>
+                    </div>
+                </templates>
+            </gantt>
+        </field>
+    </record>
+
     <record id="freelancer_project_view_search" model="ir.ui.view">
         <field name="name">freelancer.project.view.search</field>
         <field name="model">freelancer.project</field>
@@ -101,7 +138,7 @@
     <record id="freelancer_project_action" model="ir.actions.act_window">
         <field name="name">Projects</field>
         <field name="res_model">freelancer.project</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,graph,gantt</field>
         <field name="view_id" ref="freelancer_project_view_tree"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
