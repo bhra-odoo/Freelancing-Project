@@ -44,7 +44,7 @@ class FreelancerController(http.Controller):
     
     @http.route(['/place_bid', '/place_bid/<int:project_id>'], type='http', auth="public", website=True)
     def place_bids(self, project_id, **kw):
-        breakpoint()
+
         name = http.request.httprequest.form.get('name')
         email= http.request.httprequest.form.get('email')
         mobile = http.request.httprequest.form.get('mobile')
@@ -63,5 +63,5 @@ class FreelancerController(http.Controller):
             ]
         })
 
-        return http.request.render('Freelancing.website_bids_page')
+        return http.request.render('Freelancing.website_bids_page', {'project_id': project_id})
     

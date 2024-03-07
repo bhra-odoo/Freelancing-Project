@@ -24,19 +24,20 @@
                     <div class="o_field_widget o_field_image oe_avatar">
                         <div class="d-inline-block position-relative">
                             <div class="d-flex justify-content-between w-100 bottom-0">
-                                <field name="freelancer_image" widget="image"/>
+                                <field name="image_1920" widget="image"/>
                             </div>
                         </div>
                     </div>
                     <div class="oe_title mb-3 mx-3 position-relative">
                         <h1>
-                            <label for="name" string="Title"/>
-                            <field name="name" placeholder="Freelancer Name"></field>
+                            <label for="name" string="Username"/>
+                            <field name="name" placeholder="Username"></field>
                         </h1>
                     </div>
                     <div class="row mx-3">
                         <div class="col-md-6">
                             <group>
+                                <field name="user_id" widget="many2one_avatar_user"/>
                                 <field name="email"/>
                                 <field name="mobile"/>
                                 <field name="hourly_rate"/>

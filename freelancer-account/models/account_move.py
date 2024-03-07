@@ -6,5 +6,6 @@ class AccountMove(models.Model):
     _name = 'account.move'
     _inherit = 'account.move'
 
-    freelancer_id = fields.Many2one('freelancer.freelancer', string='Freelancer')
+    freelancer_id = fields.Many2one('freelancer.freelancer', string='Username')
+    user_id = fields.Many2one('res.users', string='Customer')
     

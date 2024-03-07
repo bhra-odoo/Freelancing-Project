@@ -15,6 +15,14 @@ class FreelancerBids(models.Model):
         ('pending', 'Pending'),
         ('accepted', 'Accepted'),
         ('rejected', 'Rejected')], default='pending', string='Status')
+    
+    @api.model
+    def create(self, vals):   
+        record = super(FreelancerBids, self).create(vals)
+        if record.project_id and not record.project_id.bid_ids.filtered(lambda bid: bid.id != record.id):
+            record.project_id.write({'state': 'offer_received'})
+        
+        return record
 
     def action_offer_accepted(self):
         if self.project_id.state != 'offer_accepted':

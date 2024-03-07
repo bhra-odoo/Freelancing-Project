@@ -15,6 +15,7 @@ class FreelancerProject(models.Model):
             platform_fees = 100.00
 
             vals = {
+                'partner_id': project_rec.assigned_to.user_id.id,
                 'freelancer_id': project_rec.assigned_to.id,
                 'move_type': 'out_invoice',
                 'invoice_line_ids': [

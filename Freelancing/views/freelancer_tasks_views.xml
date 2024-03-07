@@ -1,17 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- View -->
+    <record id="freelancer_task_view_kanban" model="ir.ui.view">
+        <field name="name">freelancer.task.view.kanban</field>
+        <field name="model">freelancer.task</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard o_project_kanban o_emphasize_colors"
+                default_group_by="status" string="Tasks">
+                <field name="name" class="o_kanban_title" />
+                <field name="description" class="o_kanban_group" />
+                <field name="client_id" class="o_kanban_group" />
+                <field name="project_id" class="o_kanban_group" />
+                <field name="assigned_to" class="o_kanban_group" />
+                <field name="deadline" class="o_kanban_group" />
+                <field name="tag_ids" class="o_kanban_group" />
+                <field name="status" class="o_kanban_group" />
+                <field name="color" />
+                <templates>
+                    <t t-name="kanban-menu">
+                        <div class="container">
+                            <div class="o_kanban_card_manage_settings row">
+                                <div role="menuitem" aria-haspopup="true" class="col-6">
+                                    <ul class="oe_kanban_colorpicker" data-field="color" role="popup"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{kanban_color(record.color.value)} oe_kanban_global_click o_has_icon oe_kanban_content oe_kanban_card">
+                            <div class="o_project_kanban_main d-flex align-items-baseline gap-1">
+                                <div class="o_kanban_card_content mw-100">
+                                    <div class="o_kanban_primary_left">
+                                        <div class="o_primary">
+                                            <span class="o_text_overflow" t-att-title="record.name.value"><t t-out="record.name.value"/></span>
+                                            <span class="o_text_overflow text-muted" t-if="record.client_id.value">
+                                                <span class="fa fa-user me-2" aria-label="Client" title="Client"/><t t-out="record.client_id.value"/>
+                                            </span>
+                                            <div class="text-muted o_row">
+                                                <span class="fa fa-clock-o me-2" title="Dates"/><t t-out="record.deadline.value"/>
+                                            </div>
+                                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom mt-3">
+                                <div class="oe_kanban_bottom_right">
+                                    <span class="fa fa-user me-2" aria-label="Freelancer" title="Freelancer"/><t t-out="record.assigned_to.value"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="freelancer_task_view_tree" model="ir.ui.view">
         <field name="name">freelancer.task.view.tree</field>
         <field name="model">freelancer.task</field>
         <field name="arch" type="xml">
             <tree string="Tasks">
-                <field name="name"/>
-                <field name="client_id"/>
-                <field name="project_id"/>
-                <field name="assigned_to"/>
-                <field name="deadline"/>
-                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="name" />
+                <field name="client_id" />
+                <field name="project_id" />
+                <field name="assigned_to" />
+                <field name="deadline" />
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" />
             </tree>
         </field>
     </record>
@@ -24,23 +79,24 @@
                 <sheet>
                     <div class="oe_title mb-3 mx-3 position-relative">
                         <h1>
-                            <label for="name" string="Title"/>
+                            <label for="name" string="Title" />
                             <field name="name" placeholder="Task name"></field>
                         </h1>
                     </div>
                     <div class="row mx-3">
                         <div class="col-md-6">
                             <group>
-                                <field name="description"/>
-                                <field name="deadline"/>
+                                <field name="description" />
+                                <field name="deadline" />
                                 <field name="assigned_to" />
-                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                <field name="tag_ids" widget="many2many_tags"
+                                    options="{'color_field': 'color'}" />
                             </group>
                         </div>
                         <div class="col-md-6">
                             <group>
-                                <field name="client_id"/>
-                                <field name="project_id"/>
+                                <field name="client_id" />
+                                <field name="project_id" />
                             </group>
                         </div>
                     </div>
@@ -54,12 +110,12 @@
         <field name="model">freelancer.task</field>
         <field name="arch" type="xml">
             <search string="Tasks">
-                <field name="name"/>
-                <field name="client_id"/>
-                <field name="project_id"/>
-                <field name="assigned_to"/>
-                <field name="deadline"/>
-                <field name="tag_ids" widget="many2many_tags"/>
+                <field name="name" />
+                <field name="client_id" />
+                <field name="project_id" />
+                <field name="assigned_to" />
+                <field name="deadline" />
+                <field name="tag_ids" widget="many2many_tags" />
             </search>
         </field>
     </record>
@@ -68,11 +124,13 @@
     <record id="freelancer_tasks_action" model="ir.actions.act_window">
         <field name="name">Tasks</field>
         <field name="res_model">freelancer.task</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="freelancer_task_view_kanban" />
+        <field name="domain">[('project_id', '=', active_id)]</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Add a new Task
-              </p>
+            </p>
         </field>
     </record>
 </odoo>

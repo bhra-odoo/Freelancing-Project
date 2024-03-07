@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- View -->
+    <record id="freelancer_project_view_kanban" model="ir.ui.view">
+        <field name="name">freelancer.project.view.kanban</field>
+        <field name="model">freelancer.project</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard o_project_kanban o_emphasize_colors" default_group_by="client_id" on_create="quick_create" quick_create_view="Freelancing.freelancer_project_view_form">
+                <field name="name" class="o_kanban_title"/>
+                <field name="client_id" class="o_kanban_group"/>
+                <field name="start_date" class="o_kanban_group"/>
+                <field name="end_date" class="o_kanban_group"/>
+                <field name="ammount" class="o_kanban_group"/>
+                <field name="state" class="o_kanban_group"/>
+                <field name="tag_ids" class="o_kanban_group"/>
+                <field name="color"/>
+                <field name="task_count"/>
+                <field name="label_tasks"/>
+                <templates>
+                    <t t-name="kanban-menu">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6 o_kanban_card_manage_section o_kanban_manage_view">
+                                    <h5 role="menuitem" class="o_kanban_card_manage_title">
+                                        <span>View</span>
+                                    </h5>
+                                    <div role="menuitem">
+                                        <a name="%(freelancer_tasks_action)d" type="action">Tasks</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_manage_settings row">
+                                <div role="menuitem" aria-haspopup="true" class="col-6">
+                                    <ul class="oe_kanban_colorpicker" data-field="color" role="popup"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{kanban_color(record.state.value)} oe_kanban_global_click o_has_icon oe_kanban_content oe_kanban_card">
+                            <div class="o_project_kanban_main d-flex align-items-baseline gap-1">
+                                <div class="o_kanban_card_content mw-100">
+                                    <div class="o_kanban_primary_left">
+                                        <div class="o_primary">
+                                            <span class="o_text_overflow" t-att-title="record.name.value"><t t-out="record.name.value"/></span>
+                                            <span class="o_text_overflow text-muted" t-if="record.client_id.value">
+                                                <span class="fa fa-user me-2" aria-label="Client" title="Client"/><t t-out="record.client_id.value"/>
+                                            </span>
+                                            <div t-if="record.end_date.raw_value and record.start_date.raw_value" class="text-muted o_row">
+                                                <span class="fa fa-clock-o me-2" title="Dates"/><field name="start_date"/>
+                                                <i t-if="record.end_date.raw_value and record.start_date.raw_value" class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon" title="Arrow"/>
+                                                <field name="end_date"/>
+                                            </div>
+                                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom mt-3">
+                                <div class="oe_kanban_bottom_left">
+                                    <div class="o_project_kanban_boxes d-flex align-items-baseline">
+                                        <a class="o_project_kanban_box" name="%(freelancer_tasks_action)d" type="action">
+                                            <div>
+                                                <span class="o_value"><t name="task-count" t-out="record.task_count.value"/></span>
+                                                <span class="o_label ms-1"><t t-esc="record.label_tasks.value"/></span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="freelancer_project_view_tree" model="ir.ui.view">
         <field name="name">freelancer.project.view.tree</field>
         <field name="model">freelancer.project</field>
@@ -91,6 +168,8 @@
                 <field name="start_date" interval="month"/>
                 <field name="client_id"/>
                 <field name="ammount" type="measure"/>
+                <field name="bid_count" type="measure"/>
+                <field name="task_count" type="measure"/>
             </graph>
         </field>
     </record>
@@ -110,10 +189,15 @@
                 default_group_by="assigned_to"
                 pill_label="True">
                 <field name="state"/>
-                <field name="ammount" />
+                <field name="ammount"/>
                 <templates>
                     <div t-name="gantt-popover">
-                        <div><strong>ammount — </strong><t t-esc="ammount"/></div>
+                        <div><strong>ammount — </strong><t t-out="ammount"/></div>
+                        <div>
+                            <t t-out="start_date.toFormat('f ')"/>
+                            <i class="fa fa-long-arrow-right" title="Arrow"/>
+                            <t t-out="end_date.toFormat(' f')"/>
+                        </div>
                     </div>
                 </templates>
             </gantt>
@@ -130,6 +214,17 @@
                 <field name="assigned_to"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
+                <field name="state"/>
+                <filter 
+                    string="Available" 
+                    name="filter_availability" 
+                    domain="[('state', 'in', ['new', 'offer_received', 'offer_accepted'])]"/>
+                <group expand="0" string="Group by">
+                    <filter 
+                        name="client_id" 
+                        string="Client"
+                        context="{'group_by': 'client_id'}"/>
+                </group>
             </search>
         </field>
     </record>
@@ -138,8 +233,9 @@
     <record id="freelancer_project_action" model="ir.actions.act_window">
         <field name="name">Projects</field>
         <field name="res_model">freelancer.project</field>
-        <field name="view_mode">tree,form,graph,gantt</field>
-        <field name="view_id" ref="freelancer_project_view_tree"/>
+        <field name="view_mode">kanban,tree,form,graph,gantt</field>
+        <field name="view_id" ref="freelancer_project_view_kanban"/>
+        <field name="context">{'search_default_filter_availability': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Add a new Project
