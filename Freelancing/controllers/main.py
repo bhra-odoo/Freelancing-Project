@@ -8,7 +8,7 @@ class FreelancerController(http.Controller):
     def freelancer_details(self, page=1, name=None, **kwargs):
         domain = [('state', 'not in', ['sold', 'canceled'])]
 
-        # Filtering properties by available date.
+        # Filtering projects by available date.
         if name:
             domain.append(('client_id.name', '=', name))
             url = '/filtered_projects'
@@ -42,14 +42,23 @@ class FreelancerController(http.Controller):
     def property_details(self, project_id, **kw):
         return http.request.render('Freelancing.project_details_template', {'project': project_id})
     
-    @http.route(['/place_bid', '/place_bid/<int:project_id>'], type='http', auth="public", website=True)
-    def place_bids(self, project_id, **kw):
+    @http.route(['/place_bid/<int:project_id>'], type='http', auth="public", website=True)
+    def form_bids(self, project_id=None, **kw):
+        freelancer = http.request.env['freelancer.freelancer'].search([])
+        project = http.request.env['freelancer.project'].browse(project_id)
+        return http.request.render('Freelancing.website_bids_page', {
+            'project': project,
+            'freelancer': freelancer
+        })
+    
+    @http.route(['/bid_placed/<int:project_id>'], type='http', auth="public", website=True)
+    def place_bids(self, project_id=None, **kw):
 
-        name = http.request.httprequest.form.get('name')
-        email= http.request.httprequest.form.get('email')
-        mobile = http.request.httprequest.form.get('mobile')
-        bid_ammount = http.request.httprequest.form.get('bid_ammount')
-        description = http.request.httprequest.form.get('description')
+        freelancer_id = kw.get('freelancer_id')
+        email= kw.get('email')
+        mobile = kw.get('mobile')
+        bid_ammount = kw.get('bid_ammount')
+        description = kw.get('description')
 
         project = http.request.env['freelancer.project'].browse(project_id)
         freelancer = http.request.env['freelancer.freelancer']
@@ -57,11 +66,12 @@ class FreelancerController(http.Controller):
         project.write({
             'bid_ids': [
                 Command.create({
+                    'freelancer_id': freelancer_id,
                     'bid_amount': bid_ammount,
                     'bid_description': description,
                 })
             ]
         })
 
-        return http.request.render('Freelancing.website_bids_page', {'project_id': project_id})
+        return http.request.render('Freelancing.website_thank_you_page', {'project_id': project_id})
     

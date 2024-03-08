@@ -16,6 +16,7 @@
                 <field name="color"/>
                 <field name="task_count"/>
                 <field name="label_tasks"/>
+                <progressbar field="state" colors='{"completed": "success", "offer_accepted": "warning", "canceled": "danger"}' sum_field="ammount"/>
                 <templates>
                     <t t-name="kanban-menu">
                         <div class="container">
@@ -101,7 +102,7 @@
                 <header>
                     <button name="%(freelancer_bids_action)d" type="action" class='oe_highlight' string="Bid" invisible="state not in ['new','offer_offer_received']"/>
                     <button name="action_completed" type="object" class='oe_highlight' string="Mark As Completed" invisible="state != 'offer_accepted'"/>
-                    <button name="action_cancel" type="object" string="Cancel" invisible="state == 'completed'"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="state in ['completed', 'canceled']"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -132,13 +133,14 @@
                     <notebook>
                         <page string="Tasks">
                             <field name="task_ids">
-                                <tree editable="bottom" open_form_view="True">
+                                <tree editable="bottom" decoration-danger="remaining_days &lt; 0" decoration-success="remaining_days &gt; 0" open_form_view="True">
                                     <field name="name"/>
                                     <field name="deadline"/>
+                                    <field name="remaining_days"/>
                                     <field name="assigned_to"/>
                                     <field name="tag_ids" widget="many2many_tags"/>
                                     <field name="status"/>
-                                    <button name="action_task_complete" type="object" icon="fa-check" invisible="status == 'completed'"/>
+                                    <button name="action_task_completed" type="object" icon="fa-check" invisible="status == 'completed'"/>
                                 </tree>
                             </field>
                         </page>
@@ -156,6 +158,10 @@
                         </page>
                     </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>

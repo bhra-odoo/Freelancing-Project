@@ -15,7 +15,12 @@
                 <field name="deadline" class="o_kanban_group" />
                 <field name="tag_ids" class="o_kanban_group" />
                 <field name="status" class="o_kanban_group" />
+                <field name="remaining_days" class="o_kanban_group" />
                 <field name="color" />
+                <field name="label_days" />
+                <field name="task_count" />
+                <field name="deadline_check" />
+                <progressbar field="deadline_check" colors='{"Due": "success", "Due Soon": "warning", "Overdue": "danger"}' sum_field="task_count"/>
                 <templates>
                     <t t-name="kanban-menu">
                         <div class="container">
@@ -45,6 +50,14 @@
                                 </div>
                             </div>
                             <div class="o_kanban_record_bottom mt-3">
+                                <div class="oe_kanban_bottom_left">
+                                    <div class="o_project_kanban_boxes d-flex align-items-baseline">                       
+                                        <div>
+                                            <span class="o_value"><t name="days-count" t-out="record.remaining_days.value"/></span>
+                                            <span class="o_label ms-1"><t t-esc="record.label_days.value"/></span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="oe_kanban_bottom_right">
                                     <span class="fa fa-user me-2" aria-label="Freelancer" title="Freelancer"/><t t-out="record.assigned_to.value"/>
                                 </div>
@@ -76,6 +89,11 @@
         <field name="model">freelancer.task</field>
         <field name="arch" type="xml">
             <form string="Tasks">
+                <header>
+                    <button name="action_task_started" type="object" class='oe_highlight' string="Start" invisible="status != 'new'"/>
+                    <button name="action_task_completed" type="object" class='oe_highlight' string="Mark As Completed" invisible="status != 'in_progress'"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
                 <sheet>
                     <div class="oe_title mb-3 mx-3 position-relative">
                         <h1>
@@ -86,8 +104,9 @@
                     <div class="row mx-3">
                         <div class="col-md-6">
                             <group>
-                                <field name="description" />
-                                <field name="deadline" />
+                                <field name="description"/>
+                                <field name="deadline"/>
+                                <field name="remaining_days"/>
                                 <field name="assigned_to" />
                                 <field name="tag_ids" widget="many2many_tags"
                                     options="{'color_field': 'color'}" />
@@ -97,11 +116,40 @@
                             <group>
                                 <field name="client_id" />
                                 <field name="project_id" />
+                                <field name="status" />
                             </group>
                         </div>
                     </div>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="freelancer_task_view_gantt" model="ir.ui.view">
+        <field name="name">freelancer.task.view.gantt</field>
+        <field name="model">freelancer.task</field>
+        <field name="arch" type="xml">
+            <gantt 
+                date_start="create_date"
+                date_stop="deadline"
+                default_scale="month"
+                color="assigned_to"
+                decoration-info="status == 'new'"
+                scales="day,week,month,year"
+                string="Tasks"
+                default_group_by="assigned_to"
+                pill_label="True">
+                <field name="status"/>
+                <templates>
+                    <div t-name="gantt-popover">
+                        <div>
+                            <t t-out="create_date.toFormat('f ')"/>
+                            <i class="fa fa-long-arrow-right" title="Arrow"/>
+                            <t t-out="deadline.toFormat(' f')"/>
+                        </div>
+                    </div>
+                </templates>
+            </gantt>
         </field>
     </record>
 
@@ -116,6 +164,10 @@
                 <field name="assigned_to" />
                 <field name="deadline" />
                 <field name="tag_ids" widget="many2many_tags" />
+                <filter 
+                    string="Available" 
+                    name="filter_task_availability" 
+                    domain="[('status', 'in', ['new', 'in_progress'])]"/>
             </search>
         </field>
     </record>
@@ -124,7 +176,7 @@
     <record id="freelancer_tasks_action" model="ir.actions.act_window">
         <field name="name">Tasks</field>
         <field name="res_model">freelancer.task</field>
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,tree,gantt,form</field>
         <field name="view_id" ref="freelancer_task_view_kanban" />
         <field name="domain">[('project_id', '=', active_id)]</field>
         <field name="help" type="html">

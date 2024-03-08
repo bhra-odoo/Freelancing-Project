@@ -5,6 +5,7 @@ from odoo.exceptions import UserError
 
 class Project(models.Model):
     _name = 'freelancer.project'
+    _inherit = ['mail.thread']
     _description = 'Freelance Project'
 
     name = fields.Char(string='Project Name', required=True)
