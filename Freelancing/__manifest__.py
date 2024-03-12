@@ -26,5 +26,5 @@
         'views/freelancer_client_views.xml',
         'views/freelancer_freelancer_views.xml',
         'views/freelancer_menu.xml',
-    ]
+    ],
 }

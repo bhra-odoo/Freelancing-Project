@@ -21,7 +21,7 @@ class Project(models.Model):
     ammount = fields.Float(string="Ammount")
     color = fields.Integer(string='Color')
     bid_ids = fields.One2many('freelancer.bids', 'project_id', string='Bids')
-    bid_count = fields.Integer(string='Total Bids', compute='_compute_total_bids', store=True)
+    bid_count = fields.Integer(string='Total Bids')
     task_count = fields.Integer(string='Total Tasks', compute='_compute_total_tasks', store=True)
     label_tasks = fields.Char(string='Use Tasks as', default='Tasks')
     state = fields.Selection([
@@ -31,11 +31,6 @@ class Project(models.Model):
         ('completed', 'Completed'),
         ('canceled', 'Canceled')
     ], string='State', required=True, default="new", copy=False)
-
-    @api.depends('bid_ids')
-    def _compute_total_bids(self):
-        for record in self:
-            record.bid_count = len(record.bid_ids)
 
     @api.depends('task_ids')
     def _compute_total_tasks(self):

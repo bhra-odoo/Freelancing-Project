@@ -9,7 +9,6 @@ class FreelancerProject(models.Model):
         print("Custom action_sold method called")
         move_obj = self.env['account.move']
         for project_rec in self:
-
             total_price = project_rec.ammount
             tax_amount = total_price * 0.15
             platform_fees = 100.00

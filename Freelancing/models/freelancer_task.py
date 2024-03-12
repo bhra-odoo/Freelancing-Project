@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 
 class Task(models.Model):
     _name = 'freelancer.task'
@@ -10,7 +11,7 @@ class Task(models.Model):
     client_id = fields.Char(related="project_id.client_id.name", string='Client', required=True)
     description = fields.Text(string='Description')
     project_id = fields.Many2one('freelancer.project', string='Project', required=True)
-    deadline = fields.Datetime(string='Deadline', required=True)
+    deadline = fields.Datetime(string='Deadline', default=fields.Datetime.now(), required=True)
     today = fields.Datetime.now()
     remaining_days = fields.Integer(string='Remaining Days', compute='_compute_remaining_days')
     deadline_check = fields.Char(string='Deadline Check', compute='_compute_deadline_check')
@@ -24,10 +25,16 @@ class Task(models.Model):
         ('in_progress', 'Progress'), 
         ('completed', 'Completed')], default='new', string='Status')
 
+    @api.constrains('deadline')
+    def _check_deadline(self):
+        for task in self:
+            if task.deadline > task.project_id.end_date:
+                raise UserError("Deadline cannot be after end date!")
+
     @api.onchange('deadline', 'today')
     def _compute_remaining_days(self):
         for task in self:
-            task.remaining_days = 0 if task.status == 'completed' else (task.deadline - fields.Datetime.now()).days
+            task.remaining_days = 0 if task.status == 'completed' else (task.deadline - task.today).days
 
     @api.onchange('remaining_days')
     def _compute_deadline_check(self):
